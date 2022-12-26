@@ -19,11 +19,11 @@ namespace SG.Models
         public bool Priority { get; set; }
 
 
-        [Required]
+        [Required, Range(1,3)]
         public int CID { get; set; }
-        [Required]
+        [Required, Range(1, 3)]
         public int DangerLevel { get; set; }
-        [Required]
+        [Required, Range(1, 3)]
         public int VulnerabilityLevel { get; set; }
         public int Level { get; set; }
         public string? LevelRange { get; set; }

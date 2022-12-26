@@ -64,7 +64,7 @@ namespace SG.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Code,Danger,Vulnerability,Description,Origin,Priority,CID,DangerLevel,VulnerabilityLevel,ResourceId,RiskTypeId")] Risk risk)
         {
             risk.Level = risk.CID * risk.VulnerabilityLevel * risk.DangerLevel;
-            risk.Code = risk.Name?.Substring(0, 1) + risk.Id;
+            risk.Code = $"{risk.Name?.Substring(0, 1)}{risk.Id}";
             if (risk.Level >= 1 && risk.Level <= 3)
             {
                 risk.LevelRange = "LOW";
