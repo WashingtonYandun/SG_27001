@@ -11,6 +11,7 @@ namespace SG.Models
         public DateTime ImplementationTime { get; set; }
         [Required]
         public string? Description { get; set; }
+        public bool isEffective { get; set; }
         #endregion
 
 

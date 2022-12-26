@@ -1,0 +1,95 @@
+﻿@model IEnumerable<SG.Models.Resource>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Owner)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Guardian)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Integrity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Confidentiality)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Availavility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RelatedArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResourceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResourceCategory)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Guardian)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Integrity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Confidentiality)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Availavility)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedArea.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResourceType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResourceCategory.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

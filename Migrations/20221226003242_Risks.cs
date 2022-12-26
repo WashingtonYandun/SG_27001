@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SG.Migrations
 {
-    public partial class Risks_Controls : Migration
+    public partial class Risks : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,11 +56,25 @@ namespace SG.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImplementationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isEffective = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Controls", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RelatedAreas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RelatedAreas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,27 +103,30 @@ namespace SG.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resources",
+                name: "ResourceCategorys",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Owner = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Guardian = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RelatedArea = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Tags = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Integrity = table.Column<int>(type: "int", nullable: false),
-                    Confidentiality = table.Column<int>(type: "int", nullable: false),
-                    Availavility = table.Column<int>(type: "int", nullable: false),
-                    Value = table.Column<int>(type: "int", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resources", x => x.Id);
+                    table.PrimaryKey("PK_ResourceCategorys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResourceTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResourceTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,7 +135,7 @@ namespace SG.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -227,6 +244,47 @@ namespace SG.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Owner = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Guardian = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Integrity = table.Column<int>(type: "int", nullable: false),
+                    Confidentiality = table.Column<int>(type: "int", nullable: false),
+                    Availavility = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<int>(type: "int", nullable: false),
+                    RelatedAreaId = table.Column<int>(type: "int", nullable: false),
+                    ResourceTypeId = table.Column<int>(type: "int", nullable: false),
+                    ResourceCategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Resources_RelatedAreas_RelatedAreaId",
+                        column: x => x.RelatedAreaId,
+                        principalTable: "RelatedAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Resources_ResourceCategorys_ResourceCategoryId",
+                        column: x => x.ResourceCategoryId,
+                        principalTable: "ResourceCategorys",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Resources_ResourceTypes_ResourceTypeId",
+                        column: x => x.ResourceTypeId,
+                        principalTable: "ResourceTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -346,6 +404,21 @@ namespace SG.Migrations
                 column: "RisksId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Resources_RelatedAreaId",
+                table: "Resources",
+                column: "RelatedAreaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resources_ResourceCategoryId",
+                table: "Resources",
+                column: "ResourceCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resources_ResourceTypeId",
+                table: "Resources",
+                column: "ResourceTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Risks_ResidualRiskId",
                 table: "Risks",
                 column: "ResidualRiskId");
@@ -401,6 +474,15 @@ namespace SG.Migrations
 
             migrationBuilder.DropTable(
                 name: "RiskTypes");
+
+            migrationBuilder.DropTable(
+                name: "RelatedAreas");
+
+            migrationBuilder.DropTable(
+                name: "ResourceCategorys");
+
+            migrationBuilder.DropTable(
+                name: "ResourceTypes");
         }
     }
 }

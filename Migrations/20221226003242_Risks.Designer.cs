@@ -12,14 +12,14 @@ using SG.Data;
 namespace SG.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221225231714_Risks_Controls")]
-    partial class Risks_Controls
+    [Migration("20221226003242_Risks")]
+    partial class Risks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "6.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -258,9 +258,29 @@ namespace SG.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isEffective")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Controls");
+                });
+
+            modelBuilder.Entity("SG.Models.RelatedArea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RelatedAreas");
                 });
 
             modelBuilder.Entity("SG.Models.ResidualRisk", b =>
@@ -331,9 +351,6 @@ namespace SG.Migrations
                     b.Property<int>("Availavility")
                         .HasColumnType("int");
 
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Confidentiality")
                         .HasColumnType("int");
 
@@ -355,22 +372,64 @@ namespace SG.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RelatedArea")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RelatedAreaId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Tags")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ResourceCategoryId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ResourceTypeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RelatedAreaId");
+
+                    b.HasIndex("ResourceCategoryId");
+
+                    b.HasIndex("ResourceTypeId");
+
                     b.ToTable("Resources");
+                });
+
+            modelBuilder.Entity("SG.Models.ResourceCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResourceCategorys");
+                });
+
+            modelBuilder.Entity("SG.Models.ResourceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResourceTypes");
                 });
 
             modelBuilder.Entity("SG.Models.Risk", b =>
@@ -454,6 +513,7 @@ namespace SG.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -525,6 +585,33 @@ namespace SG.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SG.Models.Resource", b =>
+                {
+                    b.HasOne("SG.Models.RelatedArea", "RelatedArea")
+                        .WithMany()
+                        .HasForeignKey("RelatedAreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SG.Models.ResourceCategory", "ResourceCategory")
+                        .WithMany()
+                        .HasForeignKey("ResourceCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SG.Models.ResourceType", "ResourceType")
+                        .WithMany()
+                        .HasForeignKey("ResourceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RelatedArea");
+
+                    b.Navigation("ResourceCategory");
+
+                    b.Navigation("ResourceType");
                 });
 
             modelBuilder.Entity("SG.Models.Risk", b =>

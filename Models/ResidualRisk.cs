@@ -27,46 +27,8 @@ namespace SG.Models
         public int DangerLevel { get; set; }
         [Required]
         public int VulnerabilityLevel { get; set; }
-        public int Level
-        {
-            get { return Level; }
-            set
-            {
-                Level = CID * DangerLevel * VulnerabilityLevel;
-            }
-        }
-        public string? LevelRange
-        {
-            get
-            {
-                return LevelRange;
-            }
-            set
-            {
-                if (Level >= 1 && Level <= 3)
-                {
-                    LevelRange = RiskRange.LOW.ToString();
-                }
-
-                if (Level >= 4 && Level <= 8)
-                {
-                    LevelRange = RiskRange.MEDIUM.ToString();
-                }
-
-                if (Level >= 9 && Level <= 27)
-                {
-                    LevelRange = RiskRange.HIGH.ToString();
-                    Priority = true;
-                }
-            }
-        }
+        public int Level { get; set; }
+        public string? LevelRange { get; set; }
         #endregion
-    }
-
-    public enum RiskRange
-    {
-        LOW,
-        MEDIUM,
-        HIGH
     }
 }

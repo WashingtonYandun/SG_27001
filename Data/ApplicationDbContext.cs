@@ -13,9 +13,14 @@ namespace SG.Data
         }
 
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<RelatedArea> RelatedAreas { get; set; }
+        public DbSet<ResourceType> ResourceTypes { get; set; }
+        public DbSet<ResourceCategory> ResourceCategorys { get; set; }
+
         public DbSet<Risk> Risks { get; set; }
         public DbSet<RiskType> RiskTypes { get; set; }
-        public DbSet<Control> Controls { get; set; }
         public DbSet<ResidualRisk> ResidualRisks { get; set; }
+
+        public DbSet<Control> Controls { get; set; }
     }
 }

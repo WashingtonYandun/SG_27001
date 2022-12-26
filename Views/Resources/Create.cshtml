@@ -1,0 +1,80 @@
+﻿@model SG.Models.Resource
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Resource</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner" class="control-label"></label>
+                <input asp-for="Owner" class="form-control" />
+                <span asp-validation-for="Owner" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Guardian" class="control-label"></label>
+                <input asp-for="Guardian" class="form-control" />
+                <span asp-validation-for="Guardian" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Integrity" class="control-label"></label>
+                <input asp-for="Integrity" class="form-control" />
+                <span asp-validation-for="Integrity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Confidentiality" class="control-label"></label>
+                <input asp-for="Confidentiality" class="form-control" />
+                <span asp-validation-for="Confidentiality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Availavility" class="control-label"></label>
+                <input asp-for="Availavility" class="form-control" />
+                <span asp-validation-for="Availavility" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Value" class="control-label"></label>
+                <input asp-for="Value" class="form-control" />
+                <span asp-validation-for="Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelatedAreaId" class="control-label"></label>
+                <select asp-for="RelatedAreaId" class ="form-control" asp-items="ViewBag.RelatedAreaId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResourceTypeId" class="control-label"></label>
+                <select asp-for="ResourceTypeId" class ="form-control" asp-items="ViewBag.ResourceTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResourceCategoryId" class="control-label"></label>
+                <select asp-for="ResourceCategoryId" class ="form-control" asp-items="ViewBag.ResourceCategoryId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
