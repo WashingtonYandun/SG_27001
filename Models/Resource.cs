@@ -42,12 +42,14 @@ namespace SG.Models
         [Required]
         public string? Name { get; set; }
     }
+
     public class RelatedArea
     {
         public int Id { get; set; }
         [Required]
         public string? Name { get; set; }
     }
+
     public class ResourceCategory
     {
         public int Id { get; set; }

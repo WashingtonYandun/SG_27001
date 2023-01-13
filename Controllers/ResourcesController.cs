@@ -61,10 +61,11 @@ namespace SG.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Owner,Guardian,Integrity,Confidentiality,Availavility,Value,RelatedAreaId,ResourceTypeId,ResourceCategoryId")] Resource resource)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Owner,Guardian,Integrity,Confidentiality,Availavility,RelatedAreaId,ResourceTypeId,ResourceCategoryId")] Resource resource)
         {
             if (ModelState.IsValid)
             {
+                resource.Value = resource.Integrity + resource.Confidentiality + resource.Availavility;
                 _context.Add(resource);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

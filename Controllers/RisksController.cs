@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using SG.Models;
 
 namespace SG.Controllers
 {
+    //[Authorize]
     public class RisksController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -61,24 +63,28 @@ namespace SG.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Code,Danger,Vulnerability,Description,Origin,Priority,CID,DangerLevel,VulnerabilityLevel,ResourceId,RiskTypeId")] Risk risk)
+        public async Task<IActionResult> Create([Bind("Id,Name,Danger,Vulnerability,Description,Type,Origin,Priority,CID,DangerLevel,VulnerabilityLevel,ResourceId,RiskTypeId")] Risk risk)
         {
+            var r = risk.ResourceId;
             risk.Level = risk.CID * risk.VulnerabilityLevel * risk.DangerLevel;
-            risk.Code = $"{risk.Name?.Substring(0, 1)}{risk.Id}";
+            risk.Code = _context.Resources.Find(r)?.Name?.Substring(0, 1) + risk.ToString();
             if (risk.Level >= 1 && risk.Level <= 3)
             {
                 risk.LevelRange = "LOW";
             }
-            else if (risk.Level >= 4 && risk.Level <= 8)
+
+            if (risk.Level >= 4 && risk.Level <= 8)
             {
                 risk.LevelRange = "MEDIUM";
             }
-            else
+
+            if (risk.Level >= 9)
             {
                 risk.LevelRange = "HIGH";
                 risk.Priority = true;
             }
             risk.ResidualRiskId = 1;
+
             if (ModelState.IsValid)
             {
                 _context.Add(risk);
